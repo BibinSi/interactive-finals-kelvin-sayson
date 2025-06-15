@@ -191,8 +191,6 @@ button:hover {
         <input type="text" id="age" placeholder="Enter Age"/>
         <label for="gender">Gender:</label>
         <input type="text" id="gender" placeholder="Enter Gender"/>
-        <label for="status">Status:</label>
-        <input type="text" id="status" placeholder="Enter Status"/>
       </div>
     </div>
 
@@ -315,7 +313,6 @@ button:hover {
       birthday: document.getElementById("birthday").value,
       age: document.getElementById("age").value,
       gender: document.getElementById("gender").value,
-      status: document.getElementById("status").value,
     }).then(() => {
       document.getElementById("output").innerHTML = `<p class="success">Data Inserted</p>`;
       clearForm();
@@ -357,7 +354,6 @@ button:hover {
       birthday: document.getElementById("birthday").value,
       age: document.getElementById("age").value,
       gender: document.getElementById("gender").value,
-      status: document.getElementById("status").value,
     }).then(() => {
       document.getElementById("output").innerHTML = `<p class="success">Data Updated</p>`;
       clearForm();
