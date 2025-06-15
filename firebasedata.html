@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firebase Data Table</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f7fa;
+      padding: 40px 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      color: #222;
+    }
+
+    .table-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow-x: auto;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    @media (max-width: 600px) {
+      th, td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Student Data</h1>
+
+  <div class="table-container">
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Username</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5">Loading data...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGY4xvySsCKWGgOZnLmRm7WbisF1tIE_Q",
+      authDomain: "kiwobyte.firebaseapp.com",
+      databaseURL: "https://kiwobyte-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "kiwobyte",
+      storageBucket: "kiwobyte.firebasestorage.app",
+      messagingSenderId: "1017038385850",
+      appId: "1:1017038385850:web:34cec211d62de9e84a0883",
+      measurementId: "G-FHWSPCQ27F"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const dataRef = database.ref('student');
+
+    dataRef.once('value')
+      .then((snapshot) => {
+        const data = snapshot.val();
+        const tbody = document.querySelector('#data-table tbody');
+        tbody.innerHTML = '';
+
+        if (data) {
+          Object.keys(data).forEach((key) => {
+            const item = data[key];
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${key}</td>
+              <td>${item.name || ''}</td>
+              <td>${item.address || ''}</td>
+              <td>${item.username || ''}</td>
+              <td>${item.email || ''}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        } else {
+          tbody.innerHTML = '<tr><td colspan="5">No data available.</td></tr>';
+        }
+      })
+      .catch((error) => {
+        document.querySelector('#data-table tbody').innerHTML =
+          `<tr><td colspan="5">Error: ${error.message}</td></tr>`;
+      });
+  </script>
+
+</body>
+</html>
